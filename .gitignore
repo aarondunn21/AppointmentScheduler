@@ -1,0 +1,2 @@
+# Additional files that don't need to be tracked by git
+__pycache__/
