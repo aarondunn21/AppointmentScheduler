@@ -1,0 +1,33 @@
+<html>
+
+<head>
+    <title>Set Schedule</title>
+    <link rel="stylesheet" href="css/style.css">
+</head>
+
+<body>
+    
+    <form action="{{url_for('setSchedule', id=user._id)}}">
+        <h1>Set Schedule</h1>
+        <p>Enter your name:</p>
+        <input type="text" name="name" placeholder="Enter your name">
+        <p>Enter your email:</p>
+        <input type="text" name="email" placeholder="Enter your email">
+        <p>Enter your phone number:</p>
+        <input type="text" name="phone" placeholder="Enter your phone number">
+        <p>Enter your appointment date:</p>
+        <input type="text" name="date" placeholder="Enter your appointment date">
+        <p>Enter your appointment time:</p>
+        <input type="text" name="time" placeholder="Enter your appointment time">
+        <p>Enter your appointment type:</p>
+        <input type="text" name="type" placeholder="Enter your appointment type">
+        <p>Enter your appointment location:</p>
+        <input type="text" name="location" placeholder="Enter your appointment location">
+        <p>Enter your appointment description:</p>
+        <input type="text" name="description" placeholder="Enter your appointment description">
+        <input type="submit" value="Submit">
+
+
+    </form>
+</body>
+</html>

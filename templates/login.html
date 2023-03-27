@@ -1,0 +1,21 @@
+<html>
+<head>
+    <title>Appointment Scheduler System</title>
+    <link rel="stylesheet" href="css/style.css">
+</head>
+
+<body>
+    <h1>Appointment Scheduler System</h1>
+    <form action="{{ url_for('login')}}" method="POST" role="form">
+        Username <input name="username" type="text" class="form-control" placeholder="enter username" />
+        <br>
+        Password <input name="password" type="text" class="form-control" placeholder="enter password" />
+        <br>
+        <input type="submit">
+        <br>
+        <a href="{{ url_for('register')}}">Register</a>
+    </form>
+
+</body>
+
+</html>

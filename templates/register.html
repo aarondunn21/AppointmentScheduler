@@ -1,0 +1,24 @@
+<html>
+<head>
+    <title>Appointment Scheduler System</title>
+    <link rel="stylesheet" href="css/style.css">
+</head>
+
+<body>
+    <h1>Appointment Scheduler System</h1>
+
+    <form action="{{ url_for('add_user')}}" method="POST" role="form">
+        Name <input name="name" type="text" class="form-control" placeholder="enter name" />
+        <br>
+        Email <input name="email" type="text" class="form-control" placeholder="enter email" />
+        <br>
+        Username <input name="username" type="text" class="form-control" placeholder="enter username" />
+        <br>
+        Password <input name="password" type="text" class="form-control" placeholder="enter password" />
+        <br>
+        <input type="submit">
+    </form>
+
+</body>
+
+</html>
