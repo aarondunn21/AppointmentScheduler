@@ -1,7 +1,8 @@
 <html>
 <head>
     <title>Appointment Scheduler System</title>
-    <link rel="stylesheet" href="css/style.css">
+    <link rel= "stylesheet" type= "text/css" href= "{{ url_for('static',filename='styles/style.css') }}">
+
 </head>
 
 <body>
@@ -10,11 +11,13 @@
     <form action="{{ url_for('add_user')}}" method="POST" role="form">
         Name <input name="name" type="text" class="form-control" placeholder="enter name" />
         <br>
-        Email <input name="email" type="text" class="form-control" placeholder="enter email" />
+        Email <input name="email" type="email" class="form-control" placeholder="enter email" />
         <br>
         Username <input name="username" type="text" class="form-control" placeholder="enter username" />
         <br>
-        Password <input name="password" type="text" class="form-control" placeholder="enter password" />
+        Password <input name="password" type="password" class="form-control" placeholder="enter password" />
+        <br>
+        Provider<input type="checkbox" name="provider" >
         <br>
         <input type="submit">
     </form>

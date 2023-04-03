@@ -1,33 +1,65 @@
 <html>
-
-<head>
-    <title>Set Schedule</title>
+  <head>
+    <title>Therapist Information Form</title>
     <link rel="stylesheet" href="css/style.css">
-</head>
+  </head>
+  <body>
+    <form action = "{{url_for('setSchedule', id=id)}}" method = "POST" >
+      <h1>Therapist Information</h1>
+        <label for="name">Full Name</label>
+        <br><input type="text" id= "name" name="name"><br><br>
 
-<body>
-    
-    <form action="{{url_for('setSchedule', id=user._id)}}">
-        <h1>Set Schedule</h1>
-        <p>Enter your name:</p>
-        <input type="text" name="name" placeholder="Enter your name">
-        <p>Enter your email:</p>
-        <input type="text" name="email" placeholder="Enter your email">
-        <p>Enter your phone number:</p>
-        <input type="text" name="phone" placeholder="Enter your phone number">
-        <p>Enter your appointment date:</p>
-        <input type="text" name="date" placeholder="Enter your appointment date">
-        <p>Enter your appointment time:</p>
-        <input type="text" name="time" placeholder="Enter your appointment time">
-        <p>Enter your appointment type:</p>
-        <input type="text" name="type" placeholder="Enter your appointment type">
-        <p>Enter your appointment location:</p>
-        <input type="text" name="location" placeholder="Enter your appointment location">
-        <p>Enter your appointment description:</p>
-        <input type="text" name="description" placeholder="Enter your appointment description">
-        <input type="submit" value="Submit">
+        <label for="email">Email</label>
+        <br><input type="text" id="email" name="email"><br><br>
 
+        <label for="phone">Phone Number</label>
+        <br><input type="tel" id="phone" name="phone" pattern="[0-9]{3}-[0-9]{3}-[0-9]{4}">
+        <small>Format: 123-456-7890</small><br><br>
 
+        <!-- <label for="speciality">Speciality</label>
+        <br><input type="text" id="speciality" name="speciality"><br><br> -->
+
+        <label for="avaliablity">Avaliablity</label><br>
+
+        <input type="checkbox">
+        <label for="monday"> Monday:</label>
+        <input type="time" id="monday_start" name="monday_start"> to
+        <input type="time" id="monday_end" name="monday_end"><br>
+
+        <input type="checkbox">
+        <label for="tuesday"> Tuesday:</label>
+        <input type="time" id="tuesday_start" name="tuesday_start"> to
+        <input type="time" id="tuesday_end" name="tuesday_end"><br>
+
+        <input type="checkbox">
+        <label for="wednesday"> Wednesday:</label>
+        <input type="time" id="wednesday_start" name="wednesday_start"> to
+        <input type="time" id="wednesday_end" name="wednesday_end"><br>
+
+        <input type="checkbox">
+        <label for="thursday"> Thursday:</label>
+        <input type="time" id="thursday_start" name="thursday_start"> to
+        <input type="time" id="thursday_end" name="thursday_end"><br>
+
+        <input type="checkbox">
+        <label for="friday"> Friday:</label>
+        <input type="time" id="friday_start" name="friday_start"> to
+        <input type="time" id="friday_end" name="friday_end"><br>
+
+        <input type="checkbox">
+        <label for="saturday"> Saturday:</label>
+        <input type="time" id="saturday_start" name="saturday_start"> to
+        <input type="time" id="saturday_end" name="saturday_end"><br>
+
+        <input type="checkbox">
+        <label for="sunday"> Sunday:</label>
+        <input type="time" id="sunday_start" name="sunday_start"> to
+        <input type="time" id="sunday_end" name="sunday_end"><br><br>
+
+        <label for="numweeks">Number of weeks</label><br>
+        <input id="numweeks" name="numweeks" min="0" value="1" type="number"><br><br>
+        
+      <input type="submit" name="Submit"><br>
     </form>
-</body>
+  </body>
 </html>

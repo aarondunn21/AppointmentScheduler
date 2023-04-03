@@ -1,12 +1,12 @@
-from flask import Flask, render_template, redirect, url_for, request
+from flask import Flask, render_template, redirect, url_for, request,jsonify, make_response
 from extensions import mongo
 from bson.objectid import ObjectId
-from datetime import datetime
+import datetime
+from datetime import date
 from datetime import timedelta
-from datetime import timezone
 import bcrypt
-import base64
-
+import uuid
+ 
 
 app = Flask(__name__)
 app.config['MONGO_URI'] = 'mongodb+srv://admin:Password123@appointmentscheduler.ikvbn6u.mongodb.net/mydb?retryWrites=true&w=majority'
@@ -47,13 +47,17 @@ def login():
             # User not found in database
             return render_template('/login.html')
         else:
-            user = user_collection.find_one({'username': username}, {'password': 1})
+            user = user_collection.find_one({'username': username}, {'password': 1} )
             password_b64 = user['password']
             
             if check_password(pw, password_b64):
-                return render_template("/index.html", username = username)
+                user = user_collection.find_one({'username': username}, {'public_id': 1})
+                public_id = user['public_id']
+                return redirect(url_for('home', id = public_id)  )          
             else:
-                return render_template('/login.html')
+                # returns 403 if password is wrong
+                return make_response('Could not verify',403,{'WWW-Authenticate' : 'Basic realm ="Wrong Password !!"'})
+
     else:
         return render_template('/login.html')
 
@@ -62,9 +66,18 @@ def register():
     return render_template('/register.html')
 
 @app.route("/")
-def init():
-    return redirect(url_for('login'))
-
+def home(methods =['GET']):
+    if request.method == 'GET':
+        if request.args.get('id') is None:
+            return redirect(url_for('login'))
+        else:
+            public_id = request.args.get('id')
+            user_collection = mongo.db.Users
+            user = user_collection.find_one({'public_id': public_id})
+            if user is None:
+                return redirect(url_for('login'), errorMsg = 'User not found')
+            
+            return render_template('/home.html', user = user)
 
 
 
@@ -78,18 +91,59 @@ def add_user():
     email = request.form.get('email')
     name = request.form.get('name')
     pw = request.form.get('password')
+    provider = request.form.get('provider')
+    if provider:
+        role = 'provider'
+    else:
+        role = 'user'
+
     hashed_pw = get_hashed_password(pw)
-    user_collection.insert_one({'name' : name, 'email': email, 'username': user_name,  'password' : hashed_pw})
+    user_collection.insert_one({'name' : name, 'email': email, 'username': user_name,  'password' : hashed_pw , 'role': role, "public_id": str(uuid.uuid4())})
     # get name from html input form
     # add name into table
     return redirect(url_for('login'))
 
-@app.route("/setSchedule/<id>")
+@app.route("/setSchedule/<id>",methods =['POST', 'GET'])
 def setSchedule(id):
-    appointment_collection = mongo.db.Appointments
-    appointmentItem = request.form.get('add-appointment')
-    appointment_collection.insert_one({'text' : appointmentItem})
-    return redirect(url_for('home'))
+    if request.method == 'GET':
+        return render_template('/setSchedule.html', id = id)
+    else:
+        appointment_collection = mongo.db.Appointments
+        try:
+            name = request.form['name']
+            email = request.form['email']
+            phone = request.form['phone']
+
+            # Grab the schedule data
+            schedule_data = [
+                ('Monday', request.form['monday_start'], request.form['monday_end']),
+                ('Tuesday', request.form['tuesday_start'], request.form['tuesday_end']),
+                ('Wednesday', request.form['wednesday_start'], request.form['wednesday_end']),
+                ('Thursday', request.form['thursday_start'], request.form['thursday_end']),
+                ('Friday', request.form['friday_start'], request.form['friday_end']),
+                ('Saturday', request.form['saturday_start'], request.form['saturday_end']),
+                ('Sunday', request.form['sunday_start'], request.form['sunday_end'])
+            ]
+                        # Define the start date and number of weeks
+
+   
+            today = datetime.datetime.today()
+                
+                #calculate the date of the next monday
+            monday = today + timedelta(days=(7 - today.weekday()) % 7)
+
+                # Loop through the schedule data and insert appointments for the specified number of weeks
+                # Generate appointments for each week
+            for i in range(int(request.form['numweeks'])):
+                for day, start_time, end_time in schedule_data:
+                        if start_time and end_time:
+                            # Determine the date for this day of the week
+                            currentdate = monday + timedelta(days=['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday'].index(day))
+                            
+                            appointment_collection.insert_one({'start_time' : currentdate.strftime('%Y-%m-%d') + ' ' + start_time, 'end_time' : currentdate.strftime('%Y-%m-%d') + ' ' + end_time, 'date' : currentdate, 'customer_name' : '', 'provider_name': name, 'location' :'N/A', 'Notes': 'N/A'})
+            return redirect(url_for('home',id = id))
+        except Exception as e:
+            return "Error in query operation "+ str(e)
 
 
 @app.route("/delete_user/<id>")
