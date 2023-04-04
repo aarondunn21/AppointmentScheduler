@@ -91,6 +91,7 @@ def add_user():
     email = request.form.get('email')
     name = request.form.get('name')
     pw = request.form.get('password')
+    phone = request.form.get('phone')
     provider = request.form.get('provider')
     if provider:
         role = 'provider'
@@ -98,10 +99,35 @@ def add_user():
         role = 'user'
 
     hashed_pw = get_hashed_password(pw)
-    user_collection.insert_one({'name' : name, 'email': email, 'username': user_name,  'password' : hashed_pw , 'role': role, "public_id": str(uuid.uuid4())})
+    user_collection.insert_one({'name' : name, 'email': email, 'phone':phone , 'username': user_name,  'password' : hashed_pw , 'role': role, "public_id": str(uuid.uuid4())})
     # get name from html input form
     # add name into table
     return redirect(url_for('login'))
+
+
+def getUserEmail(id):
+    user_collection = mongo.db.Users
+    user = user_collection.find_one({'public_id': id})
+    if user == None:
+        return None
+    else:
+        return user['email']
+    
+def getUsersName(id):
+    user_collection = mongo.db.Users
+    user = user_collection.find_one({'public_id': id})
+    if user == None:
+        return None
+    else:
+        return user['name']
+    
+def getPhoneNumber(id):
+    user_collection = mongo.db.Users
+    user = user_collection.find_one({'public_id': id})
+    if user == None:
+        return None
+    else:
+        return user['phone']
 
 @app.route("/setSchedule/<id>",methods =['POST', 'GET'])
 def setSchedule(id):
@@ -110,9 +136,9 @@ def setSchedule(id):
     else:
         appointment_collection = mongo.db.Appointments
         try:
-            name = request.form['name']
-            email = request.form['email']
-            phone = request.form['phone']
+            name = getUsersName(id)
+            email = getUserEmail(id)
+            phone = getPhoneNumber(id)
 
             # Grab the schedule data
             schedule_data = [

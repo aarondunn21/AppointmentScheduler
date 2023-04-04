@@ -10,8 +10,8 @@
 
    
         {% if user['role'] == 'provider' %}
-
-        <a href="{{ url_for('setSchedule', id=user['public_id'])}}">Provider Home</a>
+        <br>
+        <a href="{{ url_for('setSchedule', id=user['public_id'])}}">Set Availability</a>
         {% endif %}
 
        
