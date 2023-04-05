@@ -14,7 +14,6 @@ app.config['MONGO_URI'] = 'mongodb+srv://admin:Password123@appointmentscheduler.
 mongo.init_app(app)
 
 
-
 def get_hashed_password(password):
     # Hash a password for the first time
     #   (Using bcrypt, the salt is saved into the hash itself)    
@@ -77,7 +76,6 @@ def home(methods =['GET']):
             user = user_collection.find_one({'public_id': public_id})
             if user is None:
                 return redirect(url_for('login'), errorMsg = 'User not found')
-            
             if user['role'] == 'provider':
                 # return render_template('/providerHome.html', user = user)
                 return redirect(url_for('providerHome', id = user['public_id']))
@@ -93,7 +91,6 @@ def providerHome(id):
     myquery =  { 'provider_name' : user['name']}
     all_appointments = appointment_collection.find(myquery)
     if request.method == 'GET':
-
         return render_template('/providerHome.html', user = user, appointments = all_appointments)
     else:
         try:
@@ -114,7 +111,6 @@ def userHome(id):
         return render_template('/userHome.html', user = user, appointments = all_appointments)
     else:
         try:
-            
             return redirect(url_for('home',id = id))
         except Exception as e:
             return "Error in query operation "+ str(e)
@@ -220,11 +216,9 @@ def createAppointment(id):
     myquery =  { 'customer_name' : ""}
     all_appointments = appointment_collection.find(myquery)
     if request.method == 'GET':
-
         return render_template('/createAppointment.html', id = id, appointments = all_appointments)
     else:
         try:
-            
             return redirect(url_for('home',id = id))
         except Exception as e:
             return "Error in query operation "+ str(e)
@@ -246,13 +240,8 @@ def addAppointment():
 @app.route("/deleteAppointment/<id>/<appointmentid>", methods =['POST', 'GET'])
 def deleteAppointment(id, appointmentid):
     user_query = { 'public_id' : id}
-
     user_collection = mongo.db.Users
-   
     user = user_collection.find_one(user_query)
-    
-     
-    
     appointment_collection = mongo.db.Appointments
     myquery =  { '_id' : ObjectId(appointmentid)}
     if user['role'] == 'provider':

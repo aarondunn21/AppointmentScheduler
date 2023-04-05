@@ -1,16 +1,19 @@
 <html>
   <head>
     <title>Therapist Information Form</title>
-    <link rel="stylesheet" href="css/style.css">
+    <link rel= "stylesheet" type= "text/css" href= "{{ url_for('static',filename='styles/style.css') }}">
   </head>
   <body>
+    <ul>
+      <li><a  href="{{url_for('providerHome', id=id)}}">Home</a></li>
+      <li><a class="active" href="{{ url_for('setSchedule', id=id)}}">Availability</a></li>
+      <li><a href="{{ url_for('login')}}">Logout</a></li>
+      <li><a href="#about">About</a></li>
+    </ul>
     <form action = "{{url_for('setSchedule', id=id)}}" method = "POST" >
-      <h1>Therapist Information</h1>
-        <!-- <label for="speciality">Speciality</label>
-        <br><input type="text" id="speciality" name="speciality"><br><br> -->
 
         <label for="avaliablity">Avaliablity</label><br>
-
+        
         <input type="checkbox">
         <label for="monday"> Monday:</label>
         <input type="time" id="monday_start" name="monday_start"> to
@@ -47,13 +50,9 @@
         <input type="time" id="sunday_end" name="sunday_end"><br><br>
 
         <label for="numweeks">Number of weeks</label><br>
-        <input id="numweeks" name="numweeks" min="0" value="1" type="number"><br><br>
+        <input id="numweeks" name="numweeks" min="1" value="1" type="number"><br><br>
         
       <input type="submit" name="Submit"><br>
     </form>
-
-    <br>
-    <a href="{{ url_for('login')}}">Log Out</a>
-
   </body>
 </html>
