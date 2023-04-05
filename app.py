@@ -243,6 +243,25 @@ def addAppointment():
     return redirect(url_for('home', id = user_id))
 
 
+@app.route("/deleteAppointment/<id>/<appointmentid>", methods =['POST', 'GET'])
+def deleteAppointment(id, appointmentid):
+    user_query = { 'public_id' : id}
+
+    user_collection = mongo.db.Users
+   
+    user = user_collection.find_one(user_query)
+    
+     
+    
+    appointment_collection = mongo.db.Appointments
+    myquery =  { '_id' : ObjectId(appointmentid)}
+    if user['role'] == 'provider':
+        appointment_collection.delete_one(myquery)
+        return redirect(url_for('providerHome', id = id))
+    else:
+        set_appointment = { "$set": {'customer_name' : ''}}
+        appointment_collection.update_one(myquery, set_appointment)
+        return redirect(url_for('userHome', id = id))
 
 
 @app.route("/delete_user/<id>")

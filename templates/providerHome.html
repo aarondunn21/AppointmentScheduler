@@ -14,6 +14,7 @@
                 <td>End Time</td>
                 <td>Day</td>
                 <td>Customer</td>
+                <td>Delete</td>
                 </thead>
                 <!--Styles for table-->
                 
@@ -24,6 +25,7 @@
                 <td>{{ app['end_time']}}</td>
                 <td>{{ app['date'] }}</td>
                 <td>{{ app['customer_name'] }}</td>
+                <td><a href="{{ url_for('deleteAppointment', id=user['public_id'] ,appointmentid=app['_id'])}}"><img title="Delete" src="{{url_for('static',filename='imgs/trash.png')}}"></a></img></a></td>
                 </tr>
                 {% endfor %}
         </table>
