@@ -4,10 +4,32 @@
 
     
     
-        {% if user %}
+
         <big> Welcome {{  user['username'] }}</big>
-        {% endif %}
+
+        <table border = 6>
+                <thead style="font-weight: bold; text-align: center;">
+                <td>Provider</td>
+                <td>Start Time</td>
+                <td>End Time</td>
+                <td>Day</td>
+                </thead>
+                 <!--Styles for table-->
+         
+                {% for app in appointments %}
+                <tr>
+                <td>{{ app['provider_name']}}</td>
+                <td>{{ app['start_time']}}</td>
+                <td>{{ app['end_time']}}</td>
+                <td>{{ app['date'] }}</td>
+                </tr>
+                {% endfor %}
+        </table>
 
 
         <br>
         <a href="{{ url_for('createAppointment', id=user['public_id'])}}">Create Appointment</a>
+
+        <br>
+        <a href="{{ url_for('login')}}">Log Out</a>
+

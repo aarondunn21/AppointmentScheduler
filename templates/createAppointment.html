@@ -3,14 +3,29 @@
 
 <link rel= "stylesheet" type= "text/css" href= "{{ url_for('static',filename='styles/style.css') }}">
 
-{% for app in appointments %}
-<tr>
-        <td>{{ app['provider_name']}}</td>
-        <td>{{ app['start_time']}}</td>
-        <td>{{ app['end_time']}}</td>
-        <br>
-</tr>
-{% endfor %}
 
+<table border = 6>
+        <thead style="font-weight: bold; text-align: center;">
+           <td>Provider</td>
+           <td>Start Time</td>
+           <td>End Time</td>
+           <td>Day</td>
+        </thead>
+        <!--Styles for table-->
+        
+        {% for app in appointments %}
+        <tr>
+          <td>{{ app['provider_name']}}</td>
+          <td>{{ app['start_time']}}</td>
+          <td>{{ app['end_time']}}</td>
+          <td>{{ app['date'] }}</td>
+          <td>
+                <a href="{{ url_for('addAppointment', appId=app._id, user_id=id) }}">Add Appointment</a>
+          </td>
+        </tr>
+        {% endfor %}
+     </table>
 
+     <br>
+     <a href="{{ url_for('login')}}">Log Out</a>
        

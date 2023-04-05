@@ -79,9 +79,46 @@ def home(methods =['GET']):
                 return redirect(url_for('login'), errorMsg = 'User not found')
             
             if user['role'] == 'provider':
-                return render_template('/providerHome.html', user = user)
+                # return render_template('/providerHome.html', user = user)
+                return redirect(url_for('providerHome', id = user['public_id']))
             if user['role'] == 'user':
-                return render_template('/userHome.html', user = user)
+                return redirect(url_for('userHome', id = user['public_id']))
+                # return render_template('/userHome.html', user = user)
+            
+@app.route("/providerHome/<id>",methods =['GET'])
+def providerHome(id):
+    user_collection = mongo.db.Users
+    user = user_collection.find_one({'public_id': id})
+    appointment_collection = mongo.db.Appointments
+    myquery =  { 'provider_name' : user['name']}
+    all_appointments = appointment_collection.find(myquery)
+    if request.method == 'GET':
+
+        return render_template('/providerHome.html', user = user, appointments = all_appointments)
+    else:
+        try:
+            
+            return redirect(url_for('home',id = id))
+        except Exception as e:
+            return "Error in query operation "+ str(e)
+
+@app.route("/userHome/<id>",methods =['GET'])
+def userHome(id):
+    user_collection = mongo.db.Users
+    user = user_collection.find_one({'public_id': id})
+    appointment_collection = mongo.db.Appointments
+    myquery =  { 'customer_name' : user['name']}
+    all_appointments = appointment_collection.find(myquery)
+    if request.method == 'GET':
+
+        return render_template('/userHome.html', user = user, appointments = all_appointments)
+    else:
+        try:
+            
+            return redirect(url_for('home',id = id))
+        except Exception as e:
+            return "Error in query operation "+ str(e)
+
             
             
 
@@ -180,7 +217,8 @@ def setSchedule(id):
 @app.route("/createAppointment/<id>",methods =['POST', 'GET'])
 def createAppointment(id):
     appointment_collection = mongo.db.Appointments
-    all_appointments = appointment_collection.find()
+    myquery =  { 'customer_name' : ""}
+    all_appointments = appointment_collection.find(myquery)
     if request.method == 'GET':
 
         return render_template('/createAppointment.html', id = id, appointments = all_appointments)
@@ -190,6 +228,22 @@ def createAppointment(id):
             return redirect(url_for('home',id = id))
         except Exception as e:
             return "Error in query operation "+ str(e)
+        
+@app.route("/addAppointment/")
+def addAppointment():
+    appId = request.args.get('appId')
+    user_id = request.args.get('user_id')
+    appointment_collection = mongo.db.Appointments
+    user_collection = mongo.db.Users
+    user_query = { 'public_id' : user_id}
+    user = user_collection.find_one(user_query)
+    myquery =  { '_id' : ObjectId(appId)}
+    set_appointment = { "$set": {'customer_name' : user['name']}}
+    appointment_collection.update_one(myquery, set_appointment)
+    return redirect(url_for('home', id = user_id))
+
+
+
 
 @app.route("/delete_user/<id>")
 def delete_user(id):
