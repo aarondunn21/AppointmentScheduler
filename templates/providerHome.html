@@ -1,4 +1,4 @@
-<h1>Appointment Scheduler System</h1>
+<h1>Appointment Scheduler System (Provider)</h1>
 
 <link rel= "stylesheet" type= "text/css" href= "{{ url_for('static',filename='styles/style.css') }}">
 
@@ -8,10 +8,9 @@
         <big> Welcome {{  user['username'] }}</big>
         {% endif %}
 
-   
-        {% if user['role'] == 'provider' %}
+
         <br>
         <a href="{{ url_for('setSchedule', id=user['public_id'])}}">Set Availability</a>
-        {% endif %}
+
 
        

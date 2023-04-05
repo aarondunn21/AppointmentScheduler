@@ -1,0 +1,16 @@
+<h1>Appointment Scheduler System (User)</h1>
+<h2>Create Appointment</h2>
+
+<link rel= "stylesheet" type= "text/css" href= "{{ url_for('static',filename='styles/style.css') }}">
+
+{% for app in appointments %}
+<tr>
+        <td>{{ app['provider_name']}}</td>
+        <td>{{ app['start_time']}}</td>
+        <td>{{ app['end_time']}}</td>
+        <br>
+</tr>
+{% endfor %}
+
+
+       

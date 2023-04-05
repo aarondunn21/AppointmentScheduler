@@ -53,7 +53,8 @@ def login():
             if check_password(pw, password_b64):
                 user = user_collection.find_one({'username': username}, {'public_id': 1})
                 public_id = user['public_id']
-                return redirect(url_for('home', id = public_id)  )          
+                return redirect(url_for('home', id = public_id)  )      
+                      
             else:
                 # returns 403 if password is wrong
                 return make_response('Could not verify',403,{'WWW-Authenticate' : 'Basic realm ="Wrong Password !!"'})
@@ -77,7 +78,12 @@ def home(methods =['GET']):
             if user is None:
                 return redirect(url_for('login'), errorMsg = 'User not found')
             
-            return render_template('/home.html', user = user)
+            if user['role'] == 'provider':
+                return render_template('/providerHome.html', user = user)
+            if user['role'] == 'user':
+                return render_template('/userHome.html', user = user)
+            
+            
 
 
 
@@ -171,6 +177,19 @@ def setSchedule(id):
         except Exception as e:
             return "Error in query operation "+ str(e)
 
+@app.route("/createAppointment/<id>",methods =['POST', 'GET'])
+def createAppointment(id):
+    appointment_collection = mongo.db.Appointments
+    all_appointments = appointment_collection.find()
+    if request.method == 'GET':
+
+        return render_template('/createAppointment.html', id = id, appointments = all_appointments)
+    else:
+        try:
+            
+            return redirect(url_for('home',id = id))
+        except Exception as e:
+            return "Error in query operation "+ str(e)
 
 @app.route("/delete_user/<id>")
 def delete_user(id):

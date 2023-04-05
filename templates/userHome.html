@@ -1,0 +1,13 @@
+<h1>Appointment Scheduler System (User)</h1>
+
+<link rel= "stylesheet" type= "text/css" href= "{{ url_for('static',filename='styles/style.css') }}">
+
+    
+    
+        {% if user %}
+        <big> Welcome {{  user['username'] }}</big>
+        {% endif %}
+
+
+        <br>
+        <a href="{{ url_for('createAppointment', id=user['public_id'])}}">Create Appointment</a>
