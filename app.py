@@ -53,7 +53,8 @@ def login():
             if check_password(pw, password_b64):
                 user = user_collection.find_one({'username': username}, {'public_id': 1})
                 public_id = user['public_id']
-                return redirect(url_for('home', id = public_id)  )          
+                return redirect(url_for('home', id = public_id)  )      
+                      
             else:
                 # returns 403 if password is wrong
                 return make_response('Could not verify',403,{'WWW-Authenticate' : 'Basic realm ="Wrong Password !!"'})
@@ -77,7 +78,49 @@ def home(methods =['GET']):
             if user is None:
                 return redirect(url_for('login'), errorMsg = 'User not found')
             
-            return render_template('/home.html', user = user)
+            if user['role'] == 'provider':
+                # return render_template('/providerHome.html', user = user)
+                return redirect(url_for('providerHome', id = user['public_id']))
+            if user['role'] == 'user':
+                return redirect(url_for('userHome', id = user['public_id']))
+                # return render_template('/userHome.html', user = user)
+            
+@app.route("/providerHome/<id>",methods =['GET'])
+def providerHome(id):
+    user_collection = mongo.db.Users
+    user = user_collection.find_one({'public_id': id})
+    appointment_collection = mongo.db.Appointments
+    myquery =  { 'provider_name' : user['name']}
+    all_appointments = appointment_collection.find(myquery)
+    if request.method == 'GET':
+
+        return render_template('/providerHome.html', user = user, appointments = all_appointments)
+    else:
+        try:
+            
+            return redirect(url_for('home',id = id))
+        except Exception as e:
+            return "Error in query operation "+ str(e)
+
+@app.route("/userHome/<id>",methods =['GET'])
+def userHome(id):
+    user_collection = mongo.db.Users
+    user = user_collection.find_one({'public_id': id})
+    appointment_collection = mongo.db.Appointments
+    myquery =  { 'customer_name' : user['name']}
+    all_appointments = appointment_collection.find(myquery)
+    if request.method == 'GET':
+
+        return render_template('/userHome.html', user = user, appointments = all_appointments)
+    else:
+        try:
+            
+            return redirect(url_for('home',id = id))
+        except Exception as e:
+            return "Error in query operation "+ str(e)
+
+            
+            
 
 
 
@@ -170,6 +213,55 @@ def setSchedule(id):
             return redirect(url_for('home',id = id))
         except Exception as e:
             return "Error in query operation "+ str(e)
+
+@app.route("/createAppointment/<id>",methods =['POST', 'GET'])
+def createAppointment(id):
+    appointment_collection = mongo.db.Appointments
+    myquery =  { 'customer_name' : ""}
+    all_appointments = appointment_collection.find(myquery)
+    if request.method == 'GET':
+
+        return render_template('/createAppointment.html', id = id, appointments = all_appointments)
+    else:
+        try:
+            
+            return redirect(url_for('home',id = id))
+        except Exception as e:
+            return "Error in query operation "+ str(e)
+        
+@app.route("/addAppointment/")
+def addAppointment():
+    appId = request.args.get('appId')
+    user_id = request.args.get('user_id')
+    appointment_collection = mongo.db.Appointments
+    user_collection = mongo.db.Users
+    user_query = { 'public_id' : user_id}
+    user = user_collection.find_one(user_query)
+    myquery =  { '_id' : ObjectId(appId)}
+    set_appointment = { "$set": {'customer_name' : user['name']}}
+    appointment_collection.update_one(myquery, set_appointment)
+    return redirect(url_for('home', id = user_id))
+
+
+@app.route("/deleteAppointment/<id>/<appointmentid>", methods =['POST', 'GET'])
+def deleteAppointment(id, appointmentid):
+    user_query = { 'public_id' : id}
+
+    user_collection = mongo.db.Users
+   
+    user = user_collection.find_one(user_query)
+    
+     
+    
+    appointment_collection = mongo.db.Appointments
+    myquery =  { '_id' : ObjectId(appointmentid)}
+    if user['role'] == 'provider':
+        appointment_collection.delete_one(myquery)
+        return redirect(url_for('providerHome', id = id))
+    else:
+        set_appointment = { "$set": {'customer_name' : ''}}
+        appointment_collection.update_one(myquery, set_appointment)
+        return redirect(url_for('userHome', id = id))
 
 
 @app.route("/delete_user/<id>")

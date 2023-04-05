@@ -1,0 +1,39 @@
+<h1>Appointment Scheduler System (User)</h1>
+
+<link rel= "stylesheet" type= "text/css" href= "{{ url_for('static',filename='styles/style.css') }}">
+
+    
+    
+
+        <big> Welcome {{  user['username'] }}</big>
+
+        <table border = 6>
+                <thead style="font-weight: bold; text-align: center;">
+                <td>Provider</td>
+                <td>Start Time</td>
+                <td>End Time</td>
+                <td>Day</td>
+                <td>Delete</td>
+
+                </thead>
+                 <!--Styles for table-->
+         
+                {% for app in appointments %}
+                <tr>
+                <td>{{ app['provider_name']}}</td>
+                <td>{{ app['start_time']}}</td>
+                <td>{{ app['end_time']}}</td>
+                <td>{{ app['date'] }}</td>
+                <td><a href="{{ url_for('deleteAppointment', id=user['public_id'] ,appointmentid=app['_id'])}}"><img title="Delete" src="{{url_for('static',filename='imgs/trash.png')}}"></a></img></a></td>
+
+                </tr>
+                {% endfor %}
+        </table>
+
+
+        <br>
+        <a href="{{ url_for('createAppointment', id=user['public_id'])}}">Create Appointment</a>
+
+        <br>
+        <a href="{{ url_for('login')}}">Log Out</a>
+

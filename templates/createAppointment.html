@@ -1,0 +1,31 @@
+<h1>Appointment Scheduler System (User)</h1>
+<h2>Create Appointment</h2>
+
+<link rel= "stylesheet" type= "text/css" href= "{{ url_for('static',filename='styles/style.css') }}">
+
+
+<table border = 6>
+        <thead style="font-weight: bold; text-align: center;">
+           <td>Provider</td>
+           <td>Start Time</td>
+           <td>End Time</td>
+           <td>Day</td>
+        </thead>
+        <!--Styles for table-->
+        
+        {% for app in appointments %}
+        <tr>
+          <td>{{ app['provider_name']}}</td>
+          <td>{{ app['start_time']}}</td>
+          <td>{{ app['end_time']}}</td>
+          <td>{{ app['date'] }}</td>
+          <td>
+                <a href="{{ url_for('addAppointment', appId=app._id, user_id=id) }}">Add Appointment</a>
+          </td>
+        </tr>
+        {% endfor %}
+     </table>
+
+     <br>
+     <a href="{{ url_for('login')}}">Log Out</a>
+       
