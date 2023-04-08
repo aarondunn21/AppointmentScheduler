@@ -1,0 +1,64 @@
+<html>
+      <head>
+        <script src="{{ url_for('static',filename='scripts/modals.js') }}" defer></script>
+        <link rel= "stylesheet" type= "text/css" href= "{{ url_for('static',filename='styles/style.css') }}">
+      </head>  
+      <body>
+        <ul>
+                <li><a  href="{{url_for('providerHome', id=user['public_id'])}}">Home</a></li>
+                <li><a href="{{ url_for('setSchedule', id=user['public_id'])}}">Availability</a></li>
+                <li><a class="active" href="{{ url_for('profile', id=user['public_id'])}}">Profile</a></li>
+                <li><a href="{{ url_for('login')}}">Logout</a></li>
+                
+              </ul>
+
+      
+<h1>Your profile</h1>
+
+
+
+    
+    
+
+        <big> Welcome {{  user['username'] }}</big>
+
+        <table border = 6>
+                
+                <!--Styles for table-->
+                
+              <!-- The Modal -->
+  <div id="myModal" class="modal">
+
+    <!-- Modal content -->
+    <div class="modal-content">
+      <span class="close">&times;</span>
+      <p>Some text in the Modal..</p>
+    </div>
+
+  </div>
+
+
+                <tr>
+                    <td>{{ user['username'] }} </td>
+                    <td><button id="myBtn">Change</button></td>              
+                </tr>
+                <tr>
+                    <td>{{ user['email'] }} </td>
+                    <td><button id="myBtn1">Change</button></td>
+                </tr>
+                <tr>
+                    <td>{{ user['phone'] }} </td>
+                    <td><button id="myBtn2">Change</button></td>
+                </tr>
+
+        </table>
+
+
+        <br>
+       
+
+        <br>
+      
+        </body>
+        </html>
+       

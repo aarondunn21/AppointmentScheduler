@@ -7,8 +7,9 @@
     <ul>
       <li><a  href="{{url_for('providerHome', id=id)}}">Home</a></li>
       <li><a class="active" href="{{ url_for('setSchedule', id=id)}}">Availability</a></li>
+      <li><a href="{{ url_for('profile'), id=user['public_id']}}">Profile</a></li>
       <li><a href="{{ url_for('login')}}">Logout</a></li>
-      <li><a href="#about">About</a></li>
+
     </ul>
     <form action = "{{url_for('setSchedule', id=id)}}" method = "POST" >
 

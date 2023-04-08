@@ -1,10 +1,10 @@
 from flask import Flask, render_template, redirect, url_for, request,jsonify, make_response
-from extensions import mongo
+from helpers import *
 from bson.objectid import ObjectId
 import datetime
 from datetime import date
 from datetime import timedelta
-import bcrypt
+
 import uuid
  
 
@@ -13,24 +13,6 @@ app.config['MONGO_URI'] = 'mongodb+srv://admin:Password123@appointmentscheduler.
 # Database location on Atlas
 mongo.init_app(app)
 
-
-def get_hashed_password(password):
-    # Hash a password for the first time
-    #   (Using bcrypt, the salt is saved into the hash itself)    
-    # converting password to array of bytes
-    bytes = password.encode('utf-8')
-    # generating the salt
-    salt = bcrypt.gensalt()
-    # Hashing the password
-    return bcrypt.hashpw(bytes, salt)
-
-
-def check_password(plain_text_password, hashed_password):
-    # Check hashed password. Using bcrypt, the salt is saved into the hash itself
-      # Taking user entered password 
-    
-    # checking password
-    return bcrypt.checkpw(plain_text_password.encode('utf-8'), hashed_password)
 
 
 @app.route("/login", methods =['POST', 'GET'])
@@ -64,6 +46,18 @@ def login():
 @app.route("/register")
 def register():
     return render_template('/register.html')
+
+@app.route('/profile/<id>', methods =['GET'])
+def profile(id):
+    if request.method == 'GET':
+        user_collection = mongo.db.Users
+        user = user_collection.find_one({'public_id': id})
+        if user is None:
+            return redirect(url_for('login'), errorMsg = 'User not found')
+        else:
+            return render_template('/profile.html', user = user)
+
+
 
 @app.route("/")
 def home(methods =['GET']):
@@ -143,30 +137,6 @@ def add_user():
     # add name into table
     return redirect(url_for('login'))
 
-
-def getUserEmail(id):
-    user_collection = mongo.db.Users
-    user = user_collection.find_one({'public_id': id})
-    if user == None:
-        return None
-    else:
-        return user['email']
-    
-def getUsersName(id):
-    user_collection = mongo.db.Users
-    user = user_collection.find_one({'public_id': id})
-    if user == None:
-        return None
-    else:
-        return user['name']
-    
-def getPhoneNumber(id):
-    user_collection = mongo.db.Users
-    user = user_collection.find_one({'public_id': id})
-    if user == None:
-        return None
-    else:
-        return user['phone']
 
 @app.route("/setSchedule/<id>",methods =['POST', 'GET'])
 def setSchedule(id):
