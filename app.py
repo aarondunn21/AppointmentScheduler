@@ -52,10 +52,11 @@ def profile(id):
     if request.method == 'GET':
         user_collection = mongo.db.Users
         user = user_collection.find_one({'public_id': id})
+        id = user['public_id']
         if user is None:
             return redirect(url_for('login'), errorMsg = 'User not found')
         else:
-            return render_template('/profile.html', user = user)
+            return render_template('/profile.html', user = user, id = id)
 
 
 
@@ -141,7 +142,11 @@ def add_user():
 @app.route("/setSchedule/<id>",methods =['POST', 'GET'])
 def setSchedule(id):
     if request.method == 'GET':
-        return render_template('/setSchedule.html', id = id)
+        user_collection = mongo.db.Users
+        user = user_collection.find_one({'public_id': id})
+        if user['role'] == "user":
+            return redirect(url_for('createAppointment', id = id))
+        return render_template('/setSchedule.html', id = id, user = user)
     else:
         appointment_collection = mongo.db.Appointments
         try:
@@ -182,11 +187,13 @@ def setSchedule(id):
 
 @app.route("/createAppointment/<id>",methods =['POST', 'GET'])
 def createAppointment(id):
+    user_collection = mongo.db.Users
+    user = user_collection.find_one({'public_id': id})
     appointment_collection = mongo.db.Appointments
     myquery =  { 'customer_name' : ""}
     all_appointments = appointment_collection.find(myquery)
     if request.method == 'GET':
-        return render_template('/createAppointment.html', id = id, appointments = all_appointments)
+        return render_template('/createAppointment.html', id = id, appointments = all_appointments, user = user)
     else:
         try:
             return redirect(url_for('home',id = id))

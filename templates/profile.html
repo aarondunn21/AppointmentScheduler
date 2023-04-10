@@ -5,8 +5,17 @@
       </head>  
       <body>
         <ul>
+                {% if user['role'] == "user" %}
+                <li><a  href="{{url_for('userHome', id=user['public_id'])}}">Home</a></li>
+                {% elif user['role'] == "provider" %}
                 <li><a  href="{{url_for('providerHome', id=user['public_id'])}}">Home</a></li>
+                {% endif %}
+                {% if user['role'] == "user" %}
+                <li><a href="{{ url_for('createAppointment', id=user['public_id'])}}">Schedule Appointment</a></li>
+                {% elif user['role'] == "provider" %}
                 <li><a href="{{ url_for('setSchedule', id=user['public_id'])}}">Availability</a></li>
+                {% endif %}
+
                 <li><a class="active" href="{{ url_for('profile', id=user['public_id'])}}">Profile</a></li>
                 <li><a href="{{ url_for('login')}}">Logout</a></li>
                 

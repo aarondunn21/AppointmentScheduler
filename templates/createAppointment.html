@@ -9,7 +9,7 @@
    <ul>
       <li><a href="{{url_for('userHome', id=id)}}">Home</a></li>
       <li><a class="active" href="{{ url_for('setSchedule', id=id)}}">Schedule Appointment</a></li>
-      <li><a href="{{ url_for('profile'), id=user['public_id']}}">Profile</a></li>
+      <li><a href="{{ url_for('profile', id=user['public_id'])}}">Profile</a></li>
       <li><a href="{{ url_for('login')}}">Logout</a></li>
 
     </ul>
