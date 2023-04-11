@@ -22,17 +22,18 @@
         <big> Welcome {{  user['username'] }}</big>
 
         <table border = 6>
+                <caption>Upcoming Appointments</caption>
                 <thead style="font-weight: bold; text-align: center;">
                 <td>Provider</td>
                 <td>Start Time</td>
                 <td>End Time</td>
                 <td>Day</td>
-                <td>Customer</td>
+                <td>Client</td>
                 <td>Delete</td>
                 </thead>
                 <!--Styles for table-->
                 
-                {% for app in appointments %}
+                {% for app in appointments_future %}
                 <tr>
                 <td>{{ app['provider_name']}}</td>
                 <td>{{ app['start_time']}}</td>
@@ -43,6 +44,30 @@
                 </tr>
                 {% endfor %}
         </table>
+
+        <table border = 6>
+                <caption>Past Appointments</caption>
+                <thead style="font-weight: bold; text-align: center;">
+                <td>Provider</td>
+                <td>Start Time</td>
+                <td>End Time</td>
+                <td>Day</td>
+                <td>Customer</td>
+                <td>Delete</td>
+                </thead>
+                <!--Styles for table-->
+                
+                {% for app in past_appointments %}
+                <tr>
+                <td>{{ app['provider_name']}}</td>
+                <td>{{ app['start_time']}}</td>
+                <td>{{ app['end_time']}}</td>
+                <td>{{ app['date'] }}</td>
+                <td>{{ app['customer_name'] }}</td>
+                <td><a href="{{ url_for('deleteAppointment', id=user['public_id'] ,appointmentid=app['_id'])}}"><img title="Delete" src="{{url_for('static',filename='imgs/trash.png')}}"></a></img></a></td>
+                </tr>
+                {% endfor %}
+          </table>
 
 
         <br>

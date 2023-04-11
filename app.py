@@ -83,10 +83,14 @@ def providerHome(id):
     user_collection = mongo.db.Users
     user = user_collection.find_one({'public_id': id})
     appointment_collection = mongo.db.Appointments
-    myquery =  { 'provider_name' : user['name']}
-    all_appointments = appointment_collection.find(myquery)
+    myquery =  {'$and':[ {'provider_name' : user['name']}, {'start_time': {'$gt' : datetime.datetime.now().strftime('%Y-%m-%d')}}]}
+    future_appointments = appointment_collection.find(myquery)
+    myquery_past =  {'$and':[ {'provider_name' : user['name']}, {'end_time': {'$lt' : datetime.datetime.now().strftime('%Y-%m-%d')}}]}
+    future_appointments = appointment_collection.find(myquery).sort("start_time", 1)
+    past_appointments = appointment_collection.find(myquery_past).sort("start_time", 1)
     if request.method == 'GET':
-        return render_template('/providerHome.html', user = user, appointments = all_appointments)
+        return render_template('/providerHome.html', user = user, appointments_future = future_appointments,
+                               past_appointments = past_appointments)
     else:
         try:
             
@@ -99,11 +103,14 @@ def userHome(id):
     user_collection = mongo.db.Users
     user = user_collection.find_one({'public_id': id})
     appointment_collection = mongo.db.Appointments
-    myquery =  { 'customer_name' : user['name']}
-    all_appointments = appointment_collection.find(myquery)
+    myquery =  {'$and':[ {'customer_name' : user['name']}, {'start_time': {'$gt' : datetime.datetime.now().strftime('%Y-%m-%d')}}]}
+    myquery_past =  {'$and':[ {'customer_name' : user['name']}, {'end_time': {'$lt' : datetime.datetime.now().strftime('%Y-%m-%d')}}]}
+    future_appointments = appointment_collection.find(myquery).sort("start_time", 1)
+    past_appointments = appointment_collection.find(myquery_past).sort("start_time", 1)
     if request.method == 'GET':
 
-        return render_template('/userHome.html', user = user, appointments = all_appointments)
+        return render_template('/userHome.html', user = user, appointments_future = future_appointments,
+                               past_appointments = past_appointments)
     else:
         try:
             return redirect(url_for('home',id = id))
@@ -179,8 +186,9 @@ def setSchedule(id):
                         if start_time and end_time:
                             # Determine the date for this day of the week
                             currentdate = monday + timedelta(days=['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday'].index(day))
-                            
+                            print(timedelta(days=['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday'].index(day)))
                             appointment_collection.insert_one({'start_time' : currentdate.strftime('%Y-%m-%d') + ' ' + start_time, 'end_time' : currentdate.strftime('%Y-%m-%d') + ' ' + end_time, 'date' : currentdate, 'customer_name' : '', 'provider_name': name, 'location' :'N/A', 'Notes': 'N/A'})
+                            monday = monday + timedelta(days=7)
             return redirect(url_for('home',id = id))
         except Exception as e:
             return "Error in query operation "+ str(e)
@@ -190,8 +198,8 @@ def createAppointment(id):
     user_collection = mongo.db.Users
     user = user_collection.find_one({'public_id': id})
     appointment_collection = mongo.db.Appointments
-    myquery =  { 'customer_name' : ""}
-    all_appointments = appointment_collection.find(myquery)
+    myquery =  {'$and':[ {'customer_name' : ''}, {'start_time': {'$gt' : datetime.datetime.now().strftime('%Y-%m-%d')}}]}
+    all_appointments = appointment_collection.find(myquery).sort("start_time", 1)
     if request.method == 'GET':
         return render_template('/createAppointment.html', id = id, appointments = all_appointments, user = user)
     else:
