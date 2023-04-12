@@ -187,8 +187,8 @@ def setSchedule(id):
                             # Determine the date for this day of the week
                             currentdate = monday + timedelta(days=['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday'].index(day))
                             print(timedelta(days=['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday'].index(day)))
-                            appointment_collection.insert_one({'start_time' : currentdate.strftime('%Y-%m-%d') + ' ' + start_time, 'end_time' : currentdate.strftime('%Y-%m-%d') + ' ' + end_time, 'date' : currentdate, 'customer_name' : '', 'provider_name': name, 'location' :'N/A', 'Notes': 'N/A'})
-                            monday = monday + timedelta(days=7)
+                            appointment_collection.insert_one({'start_time' : currentdate.strftime('%Y-%m-%d') + ' ' + start_time, 'end_time' : currentdate.strftime('%Y-%m-%d') + ' ' + end_time, 'date' : currentdate.strftime('%A, %Y-%m-%d'), 'customer_name' : '', 'provider_name': name, 'location' :'N/A', 'Notes': 'N/A'})
+                monday = monday + timedelta(days=7)
             return redirect(url_for('home',id = id))
         except Exception as e:
             return "Error in query operation "+ str(e)
