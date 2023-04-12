@@ -3,6 +3,7 @@
 <head>
 
    <link rel= "stylesheet" type= "text/css" href= "{{ url_for('static',filename='styles/style.css') }}">
+   <script src="{{url_for('static',filename='scripts/dateTimeFormatter.js')}}" defer></script>
 </head>
 
 <body>
@@ -31,8 +32,8 @@
         {% for app in appointments %}
         <tr>
           <td>{{ app['provider_name']}}</td>
-          <td>{{ app['start_time']}}</td>
-          <td>{{ app['end_time']}}</td>
+          <td class="time">{{ app['start_time']}}</td>
+          <td class="time">{{ app['end_time']}}</td>
           <td>{{ app['date'] }}</td>
           <td>
                 <a href="{{ url_for('addAppointment', appId=app._id, user_id=id) }}">Add Appointment</a>
