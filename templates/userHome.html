@@ -4,7 +4,7 @@
         <script src="{{url_for('static',filename='scripts/dateTimeFormatter.js')}}" defer></script>
         </head>
 
-        <body>
+        <body style="background-color: #ede9df;">
                 <ul>
                         <li><a class="active" href="{{url_for('providerHome', id=user['public_id'])}}">Home</a></li>
                         <li><a href="{{ url_for('createAppointment', id=user['public_id'])}}">Schedule Appointment</a></li>
@@ -19,7 +19,7 @@
     
 
                 <big> Welcome {{  user['username'] }}</big>
-        
+                <br><br>
                 <table border = 6>
                         <caption>Upcoming Appointments</caption>
                         <thead style="font-weight: bold; text-align: center;">

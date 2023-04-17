@@ -1,9 +1,9 @@
 <html>
       <head>
         <link rel= "stylesheet" type= "text/css" href= "{{ url_for('static',filename='styles/style.css') }}">
-        <script src="{{url_for('static',filename='scripts/dateTimeFormatter.js')}}" defer></script>
+        <!--<script src="{{url_for('static',filename='scripts/dateTimeFormatter.js')}}" defer></script>-->
       </head>  
-      <body>
+      <body style="background-color: #ede9df;">
         <ul>
                 <li><a class="active" href="{{url_for('providerHome', id=user['public_id'])}}">Home</a></li>
                 <li><a href="{{ url_for('setSchedule', id=user['public_id'])}}">Availability</a></li>
@@ -21,7 +21,7 @@
     
 
         <big> Welcome {{  user['username'] }}</big>
-
+<br><br>
         <table border = 6>
                 <caption>Upcoming Appointments</caption>
                 <thead style="font-weight: bold; text-align: center;">
@@ -45,7 +45,7 @@
                 </tr>
                 {% endfor %}
         </table>
-
+        <br>
         <table border = 6>
                 <caption>Past Appointments</caption>
                 <thead style="font-weight: bold; text-align: center;">

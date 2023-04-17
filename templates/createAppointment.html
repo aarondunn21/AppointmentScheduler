@@ -36,7 +36,7 @@
           <td class="time">{{ app['end_time']}}</td>
           <td>{{ app['date'] }}</td>
           <td>
-                <a href="{{ url_for('addAppointment', appId=app._id, user_id=id) }}">Add Appointment</a>
+                <a href="{{ url_for('addAppointment', appId=app._id, user_id=id) }}"><img class="plus" title="Add" src="{{url_for('static',filename='imgs/plus.png')}}"></a>
           </td>
         </tr>
         {% endfor %}
