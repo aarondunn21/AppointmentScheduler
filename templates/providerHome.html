@@ -1,7 +1,7 @@
 <html>
       <head>
         <link rel= "stylesheet" type= "text/css" href= "{{ url_for('static',filename='styles/style.css') }}">
-        <!--<script src="{{url_for('static',filename='scripts/dateTimeFormatter.js')}}" defer></script>-->
+        <script src="{{url_for('static',filename='scripts/dateTimeFormatter.js')}}" defer></script>
       </head>  
       <body style="background-color: #ede9df;">
         <ul>
@@ -61,8 +61,8 @@
                 {% for app in past_appointments %}
                 <tr>
                 <td>{{ app['provider_name']}}</td>
-                <td>{{ app['start_time']}}</td>
-                <td>{{ app['end_time']}}</td>
+                <td class="time">{{ app['start_time']}}</td>
+                <td class="time">{{ app['end_time']}}</td>
                 <td>{{ app['date'] }}</td>
                 <td>{{ app['customer_name'] }}</td>
                 <td><a href="{{ url_for('deleteAppointment', id=user['public_id'] ,appointmentid=app['_id'])}}"><img title="Delete" src="{{url_for('static',filename='imgs/trash.png')}}"></a></img></a></td>
