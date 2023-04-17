@@ -1,0 +1,14 @@
+Plan for running this project using distributed computing:
+
+None of the operations in this system are very operationally heavy--instead of breaking down individual
+tasks into multiple pieces, distribution could make sense from a bandwidth perspective. The databases
+for users and appointments could be separated and hosted on different machines on different networks,
+making each of the processes more efficient. This is obviously not very useful at the small scale of
+this demo, but if a system like this were potentially handling thousands of users and appointments, it
+could be smart to host them separately.
+
+Alternatively, distribution can offer a layer of redundancy. Separate databases on different machines can
+hold the same information, backing up periodically, to prevent massive data losses in the event of a
+failure. However, this benefit should be balanced with the fact that additional storage locations offer
+additional points of entry for adversaries. A breach becomes more feasible with every additional
+redundancy.
