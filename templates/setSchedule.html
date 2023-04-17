@@ -11,9 +11,10 @@
       <li><a href="{{ url_for('login')}}">Logout</a></li>
 
     </ul>
-    <form action = "{{url_for('setSchedule', id=id)}}" method = "POST" >
+    <div class="center">
+    <form class="login" action = "{{url_for('setSchedule', id=id)}}" method = "POST" style="background-color: ;">
 
-        <label for="avaliablity">Avaliablity</label><br>
+        <h1>Avaliablity</h1><br>
         
         <input type="checkbox">
         <label for="monday"> Monday:</label>
@@ -50,10 +51,11 @@
         <input type="time" id="sunday_start" name="sunday_start"> to
         <input type="time" id="sunday_end" name="sunday_end"><br><br>
 
-        <label for="numweeks">Number of weeks</label><br>
-        <input id="numweeks" name="numweeks" min="1" value="1" type="number"><br><br>
+        <label for="numweeks">Number of weeks</label>
+        <input style="width: 50px;" id="numweeks" name="numweeks" min="1" value="1" type="number"><br><br>
         
       <input type="submit" name="Submit"><br>
     </form>
+    </div>
   </body>
 </html>
