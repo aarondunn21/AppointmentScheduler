@@ -144,6 +144,22 @@ def add_user():
     # get name from html input form
     # add name into table
     return redirect(url_for('login'))
+   
+   
+@app.route("/change_password/<username>", methods=['POST', 'GET'])
+def change_password(username):
+    user_collection = mongo.db.Users
+    current_pass = request.form.get('currentpassword')
+    new_pass = request.form.get('newpassword')
+
+    user = user_collection.find_one({'username': username})
+    print("Proof of life")
+    if check_password(current_pass, user['password']):
+        query = {'username': username}
+        replace = {"$set": {'password': get_hashed_password(new_pass)}}
+        user_collection.update_one(query, replace)
+
+    return render_template('/login.html')   
 
 
 @app.route("/setSchedule/<id>",methods =['POST', 'GET'])
