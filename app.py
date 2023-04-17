@@ -153,7 +153,6 @@ def change_password(username):
     new_pass = request.form.get('newpassword')
 
     user = user_collection.find_one({'username': username})
-    print("Proof of life")
     if check_password(current_pass, user['password']):
         query = {'username': username}
         replace = {"$set": {'password': get_hashed_password(new_pass)}}
