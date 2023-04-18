@@ -146,19 +146,23 @@ def add_user():
     return redirect(url_for('login'))
    
    
-@app.route("/change_password/<username>", methods=['POST', 'GET'])
-def change_password(username):
+@app.route("/change_password/<id>", methods=['POST', 'GET'])
+def change_password(id):
     user_collection = mongo.db.Users
-    current_pass = request.form.get('currentpassword')
-    new_pass = request.form.get('newpassword')
+    user = user_collection.find_one({'public_id': id})
+    if request.method == 'GET':
+        return render_template('/reset.html', username= user['username'])
+    else:
+        
+        current_pass = request.form.get('currentpassword')
+        new_pass = request.form.get('newpassword')
 
-    user = user_collection.find_one({'username': username})
-    if check_password(current_pass, user['password']):
-        query = {'username': username}
-        replace = {"$set": {'password': get_hashed_password(new_pass)}}
-        user_collection.update_one(query, replace)
+        if check_password(current_pass, user['password']):
+            query = {'public_id': id}
+            replace = {"$set": {'password': get_hashed_password(new_pass)}}
+            user_collection.update_one(query, replace)
 
-    return render_template('/login.html')   
+        return render_template('/login.html')   
 
 
 @app.route("/setSchedule/<id>",methods =['POST', 'GET'])

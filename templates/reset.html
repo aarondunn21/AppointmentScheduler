@@ -8,7 +8,7 @@
 <body>
     <h1>Change Password for {{ username }}</h1>
 
-    <form action="{{ url_for('change_password', username=username)}}" method="POST" role="form">
+    <form action="{{ url_for('change_password', id=id)}}" method="POST" role="form">
         Current Password <input name="currentpassword" type="password" class="form-control" placeholder="enter password" />
         <br>
         New Password <input name="newpassword" type="password" class="form-control" placeholder="enter password" />
