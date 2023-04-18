@@ -1,3 +1,7 @@
+html {
+  background-color: blue;
+  font-family: "PT Mono", sans-serif;
+}
 
 input[type=text], input[type=password], input[type=email] {
     width: 100%;
@@ -46,8 +50,7 @@ input[type=text], input[type=password], input[type=email] {
   }
 
   img {
-    height: 30px;;
-    width: max-content;
+    height: 30px;
   }
 
   ul {
