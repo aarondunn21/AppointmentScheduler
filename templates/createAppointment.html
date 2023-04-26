@@ -18,26 +18,29 @@
    <br>
 <h2>Create Appointment</h2>
 
-
-
 <table border = 6>
         <thead style="font-weight: bold; text-align: center;">
            <td>Provider</td>
            <td>Start Time</td>
            <td>End Time</td>
            <td>Day</td>
+           <td>Notes</td>
         </thead>
         <!--Styles for table-->
-        
+
         {% for app in appointments %}
         <tr>
+        <form action="{{ url_for('addAppointment', appId=app['_id'], user_id=id)}}" method="POST" role="form">
           <td>{{ app['provider_name']}}</td>
           <td class="time">{{ app['start_time']}}</td>
           <td class="time">{{ app['end_time']}}</td>
           <td>{{ app['date'] }}</td>
+            <td><input name="notes" class="form-control" type="text" placeholder="Notes (optional)" /></td>
           <td>
-                <a href="{{ url_for('addAppointment', appId=app._id, user_id=id) }}"><img class="plus" title="Add" src="{{url_for('static',filename='imgs/plus.png')}}"></a>
+              <button type="submit">Submit</button>
+              <a href="{{ url_for('addAppointment', appId=app._id, user_id=id) }}"><img class="plus" title="Add" src="{{url_for('static',filename='imgs/plus.png')}}"></a>
           </td>
+        </form>
         </tr>
         {% endfor %}
      </table>
