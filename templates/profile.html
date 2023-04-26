@@ -32,25 +32,31 @@
         <big> Welcome {{  user['username'] }}</big>
 
         <br><br>
+        <form action="{{ url_for('update')}}" method="POST" role="form">
         <table border = 6>
                 
 
 
-
+                <input value="{{ user['public_id'] }}" type="text" class="form-control" name="public_id" style="display:none">
                 <tr>
                     <td>{{ user['username'] }} </td>
-                    <td><button id="myBtn">Change</button></td>              
+                    <td><button type="button" id="myBtn" onclick="document.getElementById('changeUsername').style = 'display: normal'; document.getElementById('submit').style = 'display: normal'; this.style = 'display: none'">Change</button><input style = 'display:none' id="changeUsername" name="newUser"></td>
                 </tr>
                 <tr>
                     <td>{{ user['email'] }} </td>
-                    <td><button id="myBtn1">Change</button></td>
+                    <td><button type="button" id="myBtn1" onclick="document.getElementById('changeEmail').style = 'display: normal; '; document.getElementById('submit').style = 'display: normal'; this.style = 'display: none'">Change</button><input style = 'display:none' id="changeEmail" name="newEmail"></td>
                 </tr>
                 <tr>
                     <td>{{ user['phone'] }} </td>
-                    <td><button id="myBtn2">Change</button></td>
+                    <td><button type="button" id="myBtn2" onclick="document.getElementById('changePhone').style = 'display: normal'; document.getElementById('submit').style = 'display: normal'; this.style = 'display: none'">Change</button><input style = 'display:none' id="changePhone" name="newPhone"></td>
                 </tr>
 
+
+
         </table>
+            <button id="submit" type="submit" style="display:none">Submit</button>
+        </form>
+
         <a href="{{ url_for('change_password', id=user['public_id'])}}">Reset password</a>
 
 
