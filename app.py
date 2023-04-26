@@ -48,10 +48,55 @@ def login():
 
 
 # send user to registration form
-@app.route("/register")
+@app.route("/register", methods=['POST', 'GET'])
 def register():
-    return render_template('/register.html')
+    if request.method == 'POST':
+        user_collection = mongo.db.Users
+        # Table to add to
+        user_name = request.form.get('username')
+        email = request.form.get('email')
+        name = request.form.get('name')
+        pw = request.form.get('password')
+        phone = request.form.get('phone')
+        provider = request.form.get('provider')
+        if provider:
+            role = 'provider'
+        else:
+            role = 'user'
 
+        hashed_pw = get_hashed_password(pw)
+        user_collection.insert_one(
+            {'name': name, 'email': email, 'phone': phone, 'username': user_name, 'password': hashed_pw, 'role': role,
+             "public_id": str(uuid.uuid4())})
+        # get name from html input form
+        # add name into table
+        return redirect(url_for('login'))
+    else:
+        return render_template('/register.html')
+
+
+@app.route("/update", methods=["POST", "GET"])
+def update():
+    public_id = request.form.get("public_id")
+    newUser = request.form.get("newUser")
+    newEmail = request.form.get("newEmail")
+    newPhone = request.form.get("newPhone")
+    user_collection = mongo.db.Users
+
+    if newUser:
+        query = {'public_id': public_id}
+        replace = {"$set": {'username': newUser}}
+        user_collection.update_one(query, replace)
+    if newEmail:
+        query = {'public_id': public_id}
+        replace = {"$set": {'email': newEmail}}
+        user_collection.update_one(query, replace)
+    if newPhone:
+        query = {'public_id': public_id}
+        replace = {"$set": {'phone': newPhone}}
+        user_collection.update_one(query, replace)
+
+    return redirect(url_for('login'))
 
 # display the user (non-provider) homepage, passing Appointments table queries to the HTML file for display
 @app.route("/userHome/<id>", methods=['GET'])
@@ -138,33 +183,6 @@ def home(methods=['GET']):
 
 
 # https://www.mongodb.com/docs/manual/tutorial/unique-constraints-on-arbitrary-fields/
-
-
-# takes register.html form and runs SQL to add a new user to the table
-# (could this be integrated into the register function? see login for reference.
-@app.route("/add_user", methods=['POST'])
-def add_user():
-    user_collection = mongo.db.Users
-    # Table to add to
-    user_name = request.form.get('username')
-    email = request.form.get('email')
-    name = request.form.get('name')
-    pw = request.form.get('password')
-    phone = request.form.get('phone')
-    provider = request.form.get('provider')
-    if provider:
-        role = 'provider'
-    else:
-        role = 'user'
-
-    hashed_pw = get_hashed_password(pw)
-    user_collection.insert_one(
-        {'name': name, 'email': email, 'phone': phone, 'username': user_name, 'password': hashed_pw, 'role': role,
-         "public_id": str(uuid.uuid4())})
-    # get name from html input form
-    # add name into table
-    return redirect(url_for('login'))
-
 
 # remove a user
 @app.route("/delete_user/<id>")
@@ -276,17 +294,21 @@ def createAppointment(id):
 
 
 # add appointment
-@app.route("/addAppointment/")
+@app.route("/addAppointment/", methods=["POST","GET"])
 def addAppointment():
-    appId = request.args.get('appId')
-    user_id = request.args.get('user_id')
+    appId = request.args.get("appId")
+    user_id = request.args.get("user_id")
+    notes = request.form.get("notes")
+    print(appId, user_id, notes)
     appointment_collection = mongo.db.Appointments
     user_collection = mongo.db.Users
     user_query = {'public_id': user_id}
     user = user_collection.find_one(user_query)
     myquery = {'_id': ObjectId(appId)}
     set_appointment = {"$set": {'customer_name': user['name']}}
+    set_notes = {"$set": {'Notes': notes}}
     appointment_collection.update_one(myquery, set_appointment)
+    appointment_collection.update_one(myquery, set_notes)
 
     return redirect(url_for('home', id=user_id))
 
