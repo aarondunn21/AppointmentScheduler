@@ -38,7 +38,7 @@
             <td><input name="notes" class="form-control" type="text" placeholder="Notes (optional)" /></td>
           <td>
               <button type="submit">Submit</button>
-              <a href="{{ url_for('addAppointment', appId=app._id, user_id=id) }}"><img class="plus" title="Add" src="{{url_for('static',filename='imgs/plus.png')}}"></a>
+              <a href="{{ url_for('addAppointment', appId=app._id, user_id=id) }}"></a>
           </td>
         </form>
         </tr>

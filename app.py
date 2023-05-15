@@ -19,7 +19,7 @@ mongo.init_app(app)
 def login():
     # if user info has been received in the form, try to sign them in
     if request.method == 'POST':
-
+        deleteOld()
         user_collection = mongo.db.Users
         username = request.form.get('username')
         pw = request.form.get('password')
@@ -45,6 +45,14 @@ def login():
     else:
         # if the form has not been filled out yet, route user to the form
         return render_template('/login.html')
+
+
+def deleteOld():
+    appointment_collection = mongo.db.Appointments
+    myquery_past = {
+        '$and': [{'customer_name': ""}, {'end_time': {'$lt': datetime.datetime.now().strftime('%Y-%m-%d')}}]}
+    print(myquery_past)
+    past_appointments = appointment_collection.delete_many(myquery_past)
 
 
 # send user to registration form
