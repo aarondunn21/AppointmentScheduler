@@ -18,10 +18,10 @@
     
     
 
-                <big> Welcome {{  user['name'] }}</big>
+                <p style="text-align: center; font-weight: bolder; font-size: 32;"> Welcome, {{  user['name'] }}</p>
                 <br><br>
-                <table border = 6>
-                        <caption>Upcoming Appointments</caption>
+                <table border=6 style="margin-left: auto; margin-right: auto; width: 80%;">
+                        <caption style="font-weight: bold;">Upcoming Appointments</caption>
                         <thead style="font-weight: bold; text-align: center;">
                         <td>Provider</td>
                         <td>Start Time</td>
@@ -35,12 +35,14 @@
                  
                         {% for app in appointments_future %}
                         <tr>
+                        <thead style="font-weight: bold; text-align: center; background-color: white; height: 40;">
                         <td>{{ app['provider_name']}}</td>
                         <td class="time">{{ app['start_time']}}</td>
                         <td class="time">{{ app['end_time']}}</td>
                         <td>{{ app['date'] }}</td>
                         <td>{{ app['Notes'] }}</td>
-                        <td><a href="{{ url_for('deleteAppointment', id=user['public_id'] ,appointmentid=app['_id'])}}"><img title="Delete" src="{{url_for('static',filename='imgs/trash.png')}}"></a></img></a></td>
+                        <td><a href="{{ url_for('deleteAppointment', id=user['public_id'] ,appointmentid=app['_id'])}}">
+                                <img title="Delete" src="{{url_for('static',filename='imgs/trash.png')}}"></a></img></a></td>
         
                         </tr>
                         {% endfor %}
@@ -48,27 +50,26 @@
                 <br>
                 <br>
 
-                <table border = 6>
-                        <caption>Past Appointments</caption>
+                <table border = 6 style="margin-left: auto; margin-right: auto; width: 80%;">
+                        <caption style="font-weight: bold;">Past Appointments</caption>
                         <thead style="font-weight: bold; text-align: center;">
                         <td>Provider</td>
                         <td>Start Time</td>
                         <td>End Time</td>
                         <td>Day</td>
-                        <td>Delete</td>
+
         
                         </thead>
                          <!--Styles for table-->
                  
                         {% for app in past_appointments %}
                         <tr>
-
+                        <thead style="font-weight: bold; text-align: center; background-color: white; height: 40;">
                         <td>{{ app['provider_name']}}</td>
                         <td class="time">{{ app['start_time']}}</td>
                         <td class="time">{{ app['end_time']}}</td>
                         <td>{{ app['date'] }}</td>
-                        <td><a href="{{ url_for('deleteAppointment', id=user['public_id'] ,appointmentid=app['_id'])}}"><img title="Delete" src="{{url_for('static',filename='imgs/trash.png')}}"></a></td>
-
+                
                         </tr>
                         {% endfor %}
                 </table>
