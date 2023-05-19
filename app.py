@@ -51,7 +51,6 @@ def deleteOld():
     appointment_collection = mongo.db.Appointments
     myquery_past = {
         '$and': [{'customer_name': ""}, {'end_time': {'$lt': datetime.datetime.now().strftime('%Y-%m-%d')}}]}
-    print(myquery_past)
     past_appointments = appointment_collection.delete_many(myquery_past)
 
 
@@ -120,6 +119,7 @@ def userHome(id):
         '$and': [{'customer_name': user['name']}, {'end_time': {'$lt': datetime.datetime.now().strftime('%Y-%m-%d')}}]}
     future_appointments = appointment_collection.find(myquery).sort("start_time", 1)
     past_appointments = appointment_collection.find(myquery_past).sort("start_time", 1)
+
 
     if request.method == 'GET':
         return render_template('/userHome.html', user=user, appointments_future=future_appointments,
@@ -195,7 +195,6 @@ def home(methods=['GET']):
 # remove a user
 @app.route("/delete_user/<id>")
 def delete_user(id):
-    print(id)
     user_collection = mongo.db.Users
     my_query = {'_id': ObjectId(id)}
     user_collection.delete_one(my_query)
@@ -307,7 +306,6 @@ def addAppointment():
     appId = request.args.get("appId")
     user_id = request.args.get("user_id")
     notes = request.form.get("notes")
-    print(appId, user_id, notes)
     appointment_collection = mongo.db.Appointments
     user_collection = mongo.db.Users
     user_query = {'public_id': user_id}

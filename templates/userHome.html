@@ -2,6 +2,7 @@
         <head>     
         <link rel= "stylesheet" type= "text/css" href= "{{ url_for('static',filename='styles/style.css') }}">
         <script src="{{url_for('static',filename='scripts/dateTimeFormatter.js')}}" defer></script>
+        <script src="{{url_for('static',filename='scripts/timeDifference.js')}}" defer></script>
         </head>
 
         <body style="background-color: #ede9df;">
@@ -27,6 +28,7 @@
                         <td>Start Time</td>
                         <td>End Time</td>
                         <td>Day</td>
+                        <td>Days Until</td>
                         <td>Notes</td>
                         <td>Delete</td>
         
@@ -40,6 +42,7 @@
                         <td class="time">{{ app['start_time']}}</td>
                         <td class="time">{{ app['end_time']}}</td>
                         <td>{{ app['date'] }}</td>
+                        <td class="timeDifference">{{ app['start_time']}}</td>
                         <td>{{ app['Notes'] }}</td>
                         <td><a href="{{ url_for('deleteAppointment', id=user['public_id'] ,appointmentid=app['_id'])}}">
                                 <img title="Delete" src="{{url_for('static',filename='imgs/trash.png')}}"></a></img></a></td>
