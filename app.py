@@ -27,7 +27,7 @@ def login():
 
         # no user found by that name? go back to login
         if user is None:
-            return render_template('/login.html')
+            return render_template('/login.html', badPass = 1)
         else:
             user = user_collection.find_one({'username': username}, {'password': 1})
             password_b64 = user['password']
@@ -40,7 +40,7 @@ def login():
 
             else:
                 # error messsage if invalid password
-                return make_response('Could not verify', 403, {'WWW-Authenticate': 'Basic realm ="Wrong Password !!"'})
+                return render_template('/login.html', badPass = 1)
 
     else:
         # if the form has not been filled out yet, route user to the form

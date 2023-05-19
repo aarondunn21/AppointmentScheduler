@@ -10,7 +10,9 @@
     
     <form class="login" role="form" method="post" action="{{ url_for('login')}}">
         <h1>Appointment Scheduler System</h1>
-
+        {%if badPass == 1%}
+        <h1 style="color: red; font-size: medium;">Error with username or password</h1>
+        {%endif%}
         <br><br>
         <span>Username</span> <input name="username" type="text" class="form-control" placeholder="enter username" />
         <br>
