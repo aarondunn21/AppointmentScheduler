@@ -50,7 +50,7 @@ def login():
 def deleteOld():
     appointment_collection = mongo.db.Appointments
     myquery_past = {
-        '$and': [{'customer_name': ""}, {'end_time': {'$lt': datetime.datetime.now().strftime('%Y-%m-%d')}}]}
+        '$and': [{'customer_name': ""}, {'end_time': {'$lt': datetime.datetime.now().strftime('%Y-%m-%d %H:%M')}}]}
     past_appointments = appointment_collection.delete_many(myquery_past)
 
 
@@ -114,9 +114,9 @@ def userHome(id):
 
     # get past and future appointments for the user
     myquery = {'$and': [{'customer_name': user['name']},
-                        {'start_time': {'$gt': datetime.datetime.now().strftime('%Y-%m-%d')}}]}
+                        {'start_time': {'$gt': datetime.datetime.now().strftime('%Y-%m-%d %h')}}]}
     myquery_past = {
-        '$and': [{'customer_name': user['name']}, {'end_time': {'$lt': datetime.datetime.now().strftime('%Y-%m-%d')}}]}
+        '$and': [{'customer_name': user['name']}, {'end_time': {'$lt': datetime.datetime.now().strftime('%Y-%m-%d %h')}}]}
     future_appointments = appointment_collection.find(myquery).sort("start_time", 1)
     past_appointments = appointment_collection.find(myquery_past).sort("start_time", 1)
 
@@ -139,10 +139,10 @@ def providerHome(id):
     appointment_collection = mongo.db.Appointments
 
     myquery = {'$and': [{'provider_name': user['name']},
-                        {'start_time': {'$gt': datetime.datetime.now().strftime('%Y-%m-%d')}}]}
+                        {'start_time': {'$gt': datetime.datetime.now().strftime('%Y-%m-%d %H:%M')}}]}
     future_appointments = appointment_collection.find(myquery)
     myquery_past = {
-        '$and': [{'provider_name': user['name']}, {'end_time': {'$lt': datetime.datetime.now().strftime('%Y-%m-%d')}}]}
+        '$and': [{'provider_name': user['name']}, {'end_time': {'$lt': datetime.datetime.now().strftime('%Y-%m-%d %H:%M')}}]}
     future_appointments = appointment_collection.find(myquery).sort("start_time", 1)
     past_appointments = appointment_collection.find(myquery_past).sort("start_time", 1)
 
